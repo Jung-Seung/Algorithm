@@ -2,29 +2,30 @@
  * @param {string} s
  * @return {string}
  */
-var longestPalindrome = function(s) {
-    return s.split('').reduce((acc, cur, idx, arr) => {
-        let evenOffset = 0;
-        let oddOffset = 0;
-        while(evenOffset <= idx && idx + 1 + evenOffset < arr.length && 
-              arr[idx - evenOffset] === arr[idx + 1 + evenOffset]){
-            evenOffset++;
+var check = function(s, i, j) {
+    while (i < j) {
+        if (s[i] !== s[j]) {
+            return false;
         }
-        
-        while(oddOffset < idx && idx + 1 + oddOffset < arr.length && 
-              arr[idx - 1 - oddOffset] === arr[idx + 1 + oddOffset]){
-            oddOffset++;
-        }
+        i++;
+        j--;
+    }
+    return true;
+}
 
-        const evenLength = evenOffset * 2;
-        const oddLength = oddOffset ? oddOffset * 2 + 1 : 1;
-        if(acc.length > evenLength && acc.length > oddLength){
-            return acc;
+var longestPalindrome = function(s) {
+    const n = s.length;
+    let starting_index = 0;
+    let max_len = 0;
+    for (let i = 0; i < n; i++) {
+        for (let j = i; j < n; j++) {
+            if (check(s, i, j)) {
+                if (j - i + 1 > max_len) {
+                    max_len = j - i + 1;
+                    starting_index = i;
+                }
+            }
         }
-        else if(evenLength > oddLength){
-            return s.substr(idx - evenOffset + 1, evenLength);
-        }else{
-            return s.substr(idx - oddOffset, oddLength);
-        }
-    },'')
-};
+    }
+    return s.substring(starting_index, starting_index + max_len);
+}
