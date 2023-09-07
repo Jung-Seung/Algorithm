@@ -4,18 +4,19 @@
  * @return {string}
  */
 var convert = function(s, numRows) {
-    if(s.length <= numRows || numRows < 2) return s;
-    const len = s.length;
-    const num = 2 * (numRows -1);
-    let res = Array(numRows).fill('');
-    let tmp = 0;
-    for(let i = 0; i<len; i++){
-        tmp = i % num;
-        if(tmp < numRows){
-            res[tmp] += s[i];
-        } else {
-            res[num - tmp] += s[i];
+    if (numRows === 1) {
+        return s;
+    }
+    let result = '';
+    const n = s.length;
+    const cycleLen = 2 * numRows - 2;
+    for (let i = 0; i < numRows; i++) {
+        for (let j = 0; j + i < n; j += cycleLen) {
+            result += s[j + i];
+            if (i !== 0 && i !== numRows - 1 && j + cycleLen - i < n) {
+                result += s[j + cycleLen - i];
+            }
         }
     }
-    return res.join('');
-};
+    return result;
+}
