@@ -3,37 +3,24 @@
  * @return {number}
  */
 var myAtoi = function(s) {
-    let sign = "+";
-    const numberArr = [];
-    const max = Math.pow(2, 31) - 1;
-    const min = Math.pow(-2, 31);
-    let n = 0;
-    const noneSpace = s.trimStart().split('');
-    if(noneSpace[0] === '+' || noneSpace[0] === '-'){
-        sign = noneSpace[0];
-        noneSpace.shift();
+    s = s.trim();  // Remove leading and trailing whitespace
+    if (s.length === 0) {
+        return 0;  // Handle empty string case
     }
-    for(let str of noneSpace){
-        if(isNaN(Number(str)) || str === " "){
-            break;
-        } else {
-            numberArr.push(str);
-        }
+    let num = 0;
+    let i = 0;
+    let sign = 1;  // 1 for positive, -1 for negative
+    if (s[i] === '+') {
+        i++;
+    } else if (s[i] === '-') {
+        i++;
+        sign = -1;
     }
-    if(numberArr.length === 0){
-        return n;
+    while (i < s.length && /^\d$/.test(s[i])) {
+        num = num * 10 + parseInt(s[i]);
+        i++;
     }
-    if(sign === "+"){
-        n = Number(numberArr.join(''));
-        if(n >= max){
-            n = max;
-        }
-    }
-    if(sign === '-'){
-        n = Number(numberArr.join('')) * -1;
-        if(n <= min){
-            n = min;
-        }
-    }
-    return n;
-};
+    num *= sign;
+    num = Math.max(Math.min(num, Math.pow(2, 31) - 1), -Math.pow(2, 31));  // Check for integer overflow
+    return num;
+}
