@@ -2,29 +2,10 @@
  * @param {number} num
  * @return {string}
  */
-
-const value = {
-    M: 1000,
-    CM: 900,
-    D: 500,
-    CD: 400,
-    C: 100,
-    XC: 90,
-    L: 50,
-    XL: 40,
-    X: 10,
-    IX: 9,
-    V: 5,
-    IV: 4,
-    I: 1
-};
-
 var intToRoman = function(num) {
-    let result = '';
-    for (let s of Object.keys(value)) {
-        const r = Math.floor(num / value[s]);
-        num -= r * value[s];
-        result += s.repeat(r);
-    }
-    return result;
+    const ones = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
+    const tens = ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"];
+    const hrns = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"];
+    const ths = ["", "M", "MM", "MMM"];
+    return ths[Math.floor(num / 1000)] + hrns[Math.floor((num % 1000) / 100)] + tens[Math.floor((num % 100) / 10)] + ones[num % 10];
 };
