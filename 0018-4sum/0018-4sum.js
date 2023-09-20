@@ -4,32 +4,38 @@
  * @return {number[][]}
  */
 var fourSum = function(nums, target) {
-    let result = new Array();
-    let check = new Array();
-
-    nums.sort((a, b) => {return a - b});
-
-    for (let i = 0; i < nums.length-3; i++) {
-        let newTarget = target - nums[i];
-        for (let j = i+1; j < nums.length-2; j++) {
-            let left = j+1;
-            let right = nums.length-1;
-            while (left < right) {
-                if (nums[j] + nums[left] + nums[right] === newTarget) {
-                    let temp = [nums[i], nums[j], nums[left], nums[right]];
-                    if (check.indexOf(temp.toString()) == -1) {
-                        check.push(temp.toString());
-                        result.push(temp);
-                    }
-                    left++;
-                    right--;
-                } else if (nums[j] + nums[left] + nums[right] < newTarget) {
-                    left++;
-                } else {
-                    right--;
-                }
-            }
-        }
+  nums.sort((a, b) => a - b);
+  const quadruplets = [];
+  const n = nums.length;
+  for (let i = 0; i < n - 3; i++) {
+    if (i > 0 && nums[i] === nums[i - 1]) {
+      continue;
     }
-    return result;
+    for (let j = i + 1; j < n - 2; j++) {
+      if (j > i + 1 && nums[j] === nums[j - 1]) {
+        continue;
+      }
+      let left = j + 1;
+      let right = n - 1;
+      while (left < right) {
+        const sum = BigInt(nums[i]) + BigInt(nums[j]) + BigInt(nums[left]) + BigInt(nums[right]);
+        if (sum < target) {
+          left++;
+        } else if (sum > target) {
+          right--;
+        } else {
+          quadruplets.push([nums[i], nums[j], nums[left], nums[right]]);
+          while (left < right && nums[left] === nums[left + 1]) {
+            left++;
+          }
+          while (left < right && nums[right] === nums[right - 1]) {
+            right--;
+          }
+          left++;
+          right--;
+        }
+      }
+    }
+  }
+  return quadruplets;
 };
