@@ -3,22 +3,22 @@
  * @return {boolean}
  */
 var isValid = function(s) {
-    let map = {
-        ")" : "(",
-        "}" : "{",
-        "]" : "["
-    }
+    // Initialize stack to store the closing brackets expected...
     let stack = [];
-    for(let i=0; i<s.length; i++){
-        if(s[i] === "(" || s[i] === "[" || s[i] === "{"){
-            stack.push(s[i]);
+    // Traverse each charater in input string...
+    for (let idx = 0; idx < s.length; idx++) {
+        // If open parentheses are present, push it to stack...
+        if (s[idx] == '{') {
+            stack.push('}');
+        } else if (s[idx] == '[') {
+            stack.push(']');
+        } else if (s[idx] == '(') {
+            stack.push(')');
         }
-        else if(stack[stack.length-1] === map[s[i]]){
-            stack.pop();
-        }
-        else{
+        // If a close bracket is found, check that it matches the last stored open bracket
+        else if (stack.pop() !== s[idx]) {
             return false;
         }
     }
-    return stack.length ? false:true;
+    return !stack.length;
 };
