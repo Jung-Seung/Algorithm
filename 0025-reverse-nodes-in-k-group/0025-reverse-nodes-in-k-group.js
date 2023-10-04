@@ -11,27 +11,40 @@
  * @return {ListNode}
  */
 var reverseKGroup = function(head, k) {
-    let list = new Array();
-    
-    while (head !== null) {
-        list.push(head.val);
-        head = head.next;
-    }
+    var dummy = new ListNode(0);
+        dummy.next = head;
+        var prevGroupTail = dummy;
 
-    if (list.length === 0) return null;
+        while (head) {
+            var groupStart = head;
+            var groupEnd = getGroupEnd(head, k);
 
-    for (let i = 0; i < list.length; i += k) {
-        let temp = list.slice(i, i+k);
-        if (temp.length < k) continue;
-        for (let j = 0; j < k; j++) {
-            list[i+j] = temp[k-j-1];
+            if (!groupEnd)
+                break;
+
+            prevGroupTail.next = reverseList(groupStart, groupEnd.next);
+            prevGroupTail = groupStart;
+            head = prevGroupTail.next;
         }
-    }
+    var newHead = dummy.next;
+    return newHead;
+}
 
-    let result = new ListNode(list.pop());
-    while (list.length > 0) {
-        result = new ListNode(list.pop(), result);
+var getGroupEnd = function(head, k) {
+    while (head && k > 1) {
+        head = head.next;
+        k--;
     }
+    return head;
+}
 
-    return result;
-};
+var reverseList = function(head, stop) {
+    var prev = stop;
+    while (head !== stop) {
+        var next = head.next;
+        head.next = prev;
+        prev = head;
+        head = next;
+    }
+    return prev;
+}
