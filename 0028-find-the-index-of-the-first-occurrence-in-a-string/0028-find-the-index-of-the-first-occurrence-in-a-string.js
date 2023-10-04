@@ -4,13 +4,20 @@
  * @return {number}
  */
 var strStr = function(haystack, needle) {
-    if (needle === "") return 0; // needle이 빈 문자열인 경우 항상 0을 반환
-
-    for (let i = 0; i <= haystack.length - needle.length; i++) {
-        if (haystack.substring(i, i + needle.length) === needle) {
-            return i; // 첫 번째 발생 위치를 찾으면 해당 위치를 반환
+    let n = haystack.length;
+    let m = needle.length;
+    
+    if (m === 0) return 0; // empty needle
+    
+    for (let i = 0; i <= n - m; i++) {
+        let found = true;
+        for (let j = 0; j < m; j++) {
+            if (haystack[i + j] !== needle[j]) {
+                found = false;
+                break;
+            }
         }
+        if (found) return i;
     }
-
-    return -1; // 발생 위치를 찾지 못한 경우 -1을 반환
-};
+    return -1; // needle not found
+}
