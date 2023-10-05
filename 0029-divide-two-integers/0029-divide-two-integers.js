@@ -4,14 +4,24 @@
  * @return {number}
  */
 var divide = function(dividend, divisor) {
-    if (dividend === -2147483648 && divisor === -1) return 2147483647
-    let ans = 0, sign = 1
-    if (dividend < 0) dividend = -dividend, sign = -sign
-    if (divisor < 0) divisor = -divisor, sign = -sign
-    if (dividend === divisor) return sign
-    for (let i = 0, val = divisor; dividend >= divisor; i = 0, val = divisor) {
-        while (val > 0 && val <= dividend) val = divisor << ++i
-        dividend -= divisor << i - 1, ans += 1 << i - 1
+    const retIsNegative = Math.sign(divisor) !== Math.sign(dividend);
+    dividend = Math.abs(dividend)
+    divisor = Math.abs(divisor)
+    
+    let ret = 0
+    while (divisor <= dividend) {
+        let value = divisor
+        let multiple = 1
+        while (value + value <= dividend) {
+            value += value
+            multiple += multiple
+        }
+        dividend = dividend - value
+        ret += multiple
     }
-    return sign < 0 ? -ans : ans
+    
+    if (ret > ((2**31) - 1)) {
+        return retIsNegative ? -(2**31) : 2**31 - 1
+    }
+    return retIsNegative ? -ret : ret
 };
