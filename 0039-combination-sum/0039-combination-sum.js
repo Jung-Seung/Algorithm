@@ -4,26 +4,24 @@
  * @return {number[][]}
  */
 var combinationSum = function(candidates, target) {
-    const result = [];
+    let index = 0
+    let tempDataStruct = []
+    let result = []
+
+    function backtracking(index, target, tempDataStruct) {
+        if(target === 0) {
+            result.push([...tempDataStruct])
+            return
+        }
     
-    function backtrack(remaining, currentCombo, start) {
-        if (remaining === 0) {
-            result.push([...currentCombo]);
-            return;
-        }
-        
-        if (remaining < 0) {
-            return;
-        }
-        
-        for (let i = start; i < candidates.length; i++) {
-            currentCombo.push(candidates[i]);
-            backtrack(remaining - candidates[i], currentCombo, i);
-            currentCombo.pop();
+        if(target < 0) return;
+    
+        for(let i=index; i<candidates.length; i++) {
+            tempDataStruct.push(candidates[i])
+            backtracking(i, target-candidates[i], tempDataStruct)
+            tempDataStruct.pop()
         }
     }
-    
-    backtrack(target, [], 0);
-    
+    backtracking(index, target, tempDataStruct)
     return result;
 };
