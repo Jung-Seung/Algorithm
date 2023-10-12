@@ -4,34 +4,37 @@
  * @return {number[][]}
  */
 var combinationSum2 = function(candidates, target) {
-    const result = [];
-    const used = Array(candidates.length).fill(false);
-    
-    candidates.sort((a, b) => a - b); // candidates 배열을 정렬합니다.
-    
-    function backtrack(remaining, currentCombo, start) {
-        if (remaining === 0) {
-            result.push([...currentCombo]);
-            return;
-        }
-        
-        if (remaining < 0) {
-            return;
-        }
-        
-        for (let i = start; i < candidates.length; i++) {
-            if (i > start && candidates[i] === candidates[i - 1] && !used[i - 1]) {
-                continue; // 중복된 숫자를 건너뜁니다.
+    candidates = candidates.sort((a, b) => a - b);
+    const output = [];
+    const hashmap = new Map();
+
+    const backtracking = (curr, remaining, target) => {
+        if (target < remaining[0] || !remaining.length) return;
+        const checkedHashmap = new Map();
+
+        for (let i = 0; i < remaining.length; i++) {
+            const number = remaining[i];
+            if (checkedHashmap.has(number)) continue;
+            if (number > target) return;
+
+            const newRemaining = [...remaining];
+            const newCurr = [...curr];
+            newCurr.push(number);
+            newRemaining.splice(i, 1);
+
+            if (target - number === 0) {
+                const key = newCurr.sort((a, b) => a - b).toString();
+                if (hashmap.has(key)) return;
+                hashmap.set(key, 1);
+                return output.push(newCurr);
             }
-            currentCombo.push(candidates[i]);
-            used[i] = true;
-            backtrack(remaining - candidates[i], currentCombo, i + 1);
-            currentCombo.pop();
-            used[i] = false;
+
+            checkedHashmap.set(number, 1);
+            backtracking(newCurr, newRemaining, target - number);
         }
     }
-    
-    backtrack(target, [], 0);
-    
-    return result;
+
+    backtracking([], candidates, target);
+
+    return output;
 };
