@@ -4,28 +4,26 @@
  * @return {boolean}
  */
 var isMatch = function(s, p) {
-    let sIndex = 0, pIndex = 0, match = 0, starIndex = -1;
-    
-    while (sIndex < s.length) {
-        if (pIndex < p.length && (p[pIndex] === '?' || s[sIndex] === p[pIndex])) {
-            sIndex++;
-            pIndex++;
-        } else if (pIndex < p.length && p[pIndex] === '*') {
-            starIndex = pIndex;
-            match = sIndex;
-            pIndex++;
-        } else if (starIndex !== -1) {
-            pIndex = starIndex + 1;
-            match++;
-            sIndex = match;
-        } else {
-            return false;
+    let string = 0, pattern = 0;
+    let starIdx = -1, pointer = -1;
+
+    while (string < s.length) {
+        if ((pattern < p.length && s[string] === p[pattern]) || p[pattern] === "?") {
+            string++;
+            pattern++;
+        } else if (pattern < p.length && p[pattern] === "*") {
+            starIdx = pattern;
+            pointer = string;
+            pattern++;
+        } else if (starIdx === -1) return false;
+        else {
+            pattern = starIdx + 1;
+            string = pointer + 1;
+            pointer = string;
         }
     }
-    
-    while (pIndex < p.length && p[pIndex] === '*') {
-        pIndex++;
+    for (let idx = pattern; idx < p.length; idx++) {
+        if (p[idx] !== "*") return false;
     }
-    
-    return pIndex === p.length;
+    return true;
 };
