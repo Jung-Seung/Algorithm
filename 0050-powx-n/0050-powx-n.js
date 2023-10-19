@@ -4,19 +4,32 @@
  * @return {number}
  */
 /*
-    1. 만약 n이 0이라면 1을 반환합니다.
-    2. 만약 n이 음수라면 x의 -n 거듭 제곱의 역수를 반환합니다.
-    3. n이 짝수인 경우, x를 n/2 거듭 제곱한 값을 구한 후 이를 제곱하여 반환합니다.
-    4. n이 홀수인 경우, x를 Math.floor(n/2) 거듭 제곱한 값을 구한 후 이를 제곱하여 x와 곱한 값을 반환합니다.
+    1. The function checks if n is equal to 0.
+    2. If it is, then the function simply returns 1.
+    3. Otherwise, the function checks if n is negative.
+    4. If it is, then the function negates x and sets n to the absolute value of n.
+    5. The function then checks if n is even.
+    6. If it is, then the function recursively calls itself to compute x(n/2)x^(n/2)x(n/2).
+    7. The result of this recursive call is then multiplied by itself to compute xnx^nx^n.
+    8. Otherwise, the function returns x∗myPow(x,n−1)x * myPow(x, n - 1)x∗myPow(x,n−1).
 */
 var myPow = function(x, n) {
-    if (n === 0) return 1;
-    if (n < 0) return 1 / myPow(x, -n);
-    if (n % 2 === 0) {
-        let half = myPow(x, n / 2);
-        return half * half;
-    } else {
-        let half = myPow(x, Math.floor(n / 2));
-        return half * half * x;
-    }
+  
+  if (n === 0) {
+    return 1;
+  }
+
+  if (n < 0) {
+    x = 1 / x;
+    n = -n;
+  }
+
+  if (n % 2 === 0) {
+    
+    let halfPower = myPow(x, n / 2);
+    return halfPower * halfPower;
+  }
+  else {
+    return x * myPow(x, n - 1);
+  }  
 };
