@@ -3,20 +3,24 @@
  * @return {boolean}
  */
 var canJump = function(nums) {
-    // 마지막 인덱스
-    const lastIdx = nums.length - 1;
-    
-    // 현재까지 도달할 수 있는 최대 인덱스
-    let maxIdx = 0;
-    
-    // 배열을 순회하며 최대 인덱스를 갱신합니다.
-    for (let i = 0; i <= maxIdx; i++) {
-        maxIdx = Math.max(maxIdx, i + nums[i]);
-        // 최대 인덱스가 마지막 인덱스보다 크거나 같으면 true를 반환합니다.
-        if (maxIdx >= lastIdx) {
-            return true;
+    // Base condition...
+    if(nums.length <= 1)
+        return true;
+    // To keep the maximum index that can be reached...
+    let maximum = nums[0];
+    // Traverse all the elements through loop...
+    for(let i = 0; i < nums.length; i++){
+        //if there is no way to jump to next...
+        // so we should return false...
+        if(maximum <= i && nums[i] == 0) 
+            return false;
+        //update the maximum jump...    
+        if(i + nums[i] > maximum){
+            maximum = i + nums[i];
         }
+        //maximum is enough to reach the end...
+        if(maximum >= nums.length-1) 
+            return true;
     }
-    // 최대 인덱스가 마지막 인덱스보다 작으면 false를 반환합니다.
-    return false;
+    return false;   
 };
