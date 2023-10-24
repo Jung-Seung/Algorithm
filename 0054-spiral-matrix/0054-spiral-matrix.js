@@ -3,50 +3,44 @@
  * @return {number[]}
  */
 var spiralOrder = function(matrix) {
-    // 행렬의 행과 열의 길이를 구합니다.
-    const m = matrix.length;
-    const n = matrix[0].length;
+    // MATRIX[Y][X]
+    //    ---------
+    //Y0 | 1  2  3 |
+    //Y1 | 4  5  6 |
+    //Y2 | 7  8  9 |
+    //    ---------
+    //     X0 X1 X2
+   
+    const yLength = matrix.length, xLength = matrix[0].length;
+    let y=0, x=0, count=0, area= xLength * yLength, bag=[];
 
-    // 결과를 저장할 배열을 선언합니다.
-    const result = [];
-
-    // 행렬을 나선형으로 읽기 위한 시작과 끝 인덱스를 설정합니다.
-    let startRow = 0;
-    let endRow = m - 1;
-    let startCol = 0;
-    let endCol = n - 1;
-
-    // 시작과 끝 인덱스가 교차할 때까지 반복합니다.
-    while (startRow <= endRow && startCol <= endCol) {
-        // 윗 행을 읽습니다.
-        for (let i = startCol; i <= endCol; i++) {
-            result.push(matrix[startRow][i]);
+    while(count<area)
+    {
+        for(let i=x; count<area && i<xLength-x; i++)
+        {
+            bag.push(matrix[y][i])
+            count++;
         }
-        startRow++;
-
-        // 오른쪽 열을 읽습니다.
-        for (let i = startRow; i <= endRow; i++) {
-            result.push(matrix[i][endCol]);
+        y++;
+        for(let i=y; count<area && i<yLength-y+1; i++)
+        {
+            bag.push(matrix[i][(xLength-1) - x])
+            count++;
         }
-        endCol--;
+        x++;
 
-        // 아랫 행을 읽습니다.
-        if (startRow <= endRow) {
-            for (let i = endCol; i >= startCol; i--) {
-                result.push(matrix[endRow][i]);
-            }
-            endRow--;
+        for(let i= (xLength-1) - x; count<area && i>=x-1; i--)
+        {
+            bag.push(matrix[(yLength-1) - (y-1)][i])
+            count++;
         }
 
-        // 왼쪽 열을 읽습니다.
-        if (startCol <= endCol) {
-            for (let i = endRow; i >= startRow; i--) {
-                result.push(matrix[i][startCol]);
-            }
-            startCol++;
+        for(let i= (yLength-1) - y; count<area && i>=y; i--)
+        {
+            bag.push(matrix[i][x-1])
+            count++;
         }
+
     }
-
-    // 나선형으로 정렬된 행렬의 모든 요소를 반환합니다.
-    return result;
+    return bag
 };
