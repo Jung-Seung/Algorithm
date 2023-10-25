@@ -2,18 +2,15 @@
  * @param {string} s
  * @return {number}
  */
-var lengthOfLastWord = function(s) {
-    // 문자열의 끝부터 시작하여 공백을 제외한 마지막 단어의 길이 계산
-    let length = 0;
-    let end = s.length - 1;
+/*
+To solve this problem, you can use the trim() method.
 
-    // 뒤에서부터 공백을 제외한 마지막 단어의 길이 계산
-    while (end >= 0 && s[end] === ' ') {
-        end--;
-    }
-    while (end >= 0 && s[end] !== ' ') {
-        length++;
-        end--;
-    }
-    return length;
+The trim() method removes whitespace from both ends of a string and returns a new string, without modifying the original string.
+
+After that, we find the index of the last space (i.e., the space before the last word) and subtract this index from the total length of the string, adjusted for the index ("-1").
+*/
+var lengthOfLastWord = function(s) {
+    let trimmedString = s.trim();
+    
+    return trimmedString.length - trimmedString.lastIndexOf(' ') - 1;
 };
