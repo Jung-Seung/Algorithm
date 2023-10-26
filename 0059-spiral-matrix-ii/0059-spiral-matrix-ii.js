@@ -3,44 +3,49 @@
  * @return {number[][]}
  */
 var generateMatrix = function(n) {
-    // 행렬 초기화
-    const matrix = new Array(n).fill(0).map(() => new Array(n).fill(0));
-    let top = 0, bottom = n - 1, left = 0, right = n - 1;
-    let num = 1;
+    let save = Array.from(Array(n),()=>new Array(n).fill(0))
+    let count =1;
+    let left =0;
+    let right =n-1;
+    let bottom = n-1;
+    let top = 0;
+    let dir = 0;
 
-    // 반시계방향으로 나선형 순서로 행렬 채우기
-    while (top <= bottom && left <= right) {
-        // 위쪽 행
-        for (let i = left; i <= right; i++) {
-            matrix[top][i] = num;
-            num++;
-        }
-        top++;
-
-        // 오른쪽 열
-        for (let i = top; i <= bottom; i++) {
-            matrix[i][right] = num;
-            num++;
-        }
-        right--;
-
-        // 아래쪽 행
-        if (top <= bottom) {
-            for (let i = right; i >= left; i--) {
-                matrix[bottom][i] = num;
-                num++;
+    while(count <= n*n){
+        if(dir == 0){
+            for(let i =left; i<=right; i++){
+                save[top][i] = count;
+                count++
             }
-            bottom--;
+            top++
+            dir++
         }
-
-        // 왼쪽 열
-        if (left <= right) {
-            for (let i = bottom; i >= top; i--) {
-                matrix[i][left] = num;
-                num++;
+        if(dir == 1){
+            for(let i =top; i<=bottom; i++){
+                save[i][right] = count;
+                count++
             }
-            left++;
+            right--
+            dir++        
         }
+        if(dir == 2){
+            for(let i =right; i>=left; i--){
+                save[bottom][i] = count;
+                count++
+            }
+            bottom--
+            dir++        
+        }
+        if(dir == 3){
+            for(let i =bottom; i>=top; i--){
+                save[i][left] = count;
+                count++
+            }
+            left++
+            dir++        
+        }
+        dir = 0;
     }
-    return matrix;
+
+    return save;
 };
