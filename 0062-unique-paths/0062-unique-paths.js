@@ -4,23 +4,24 @@
  * @return {number}
  */
 var uniquePaths = function(m, n) {
-    // 초기값으로 m x n의 2차원 배열 생성
-    let dp = new Array(m).fill(0).map(() => new Array(n).fill(0));
-
-    // 첫 번째 행과 첫 번째 열의 값은 모두 1로 초기화
+    // Create a 2D DP array filled with zeros
+    let dp = new Array(m).fill().map(() => new Array(n).fill(0));
+    
+    // Initialize the rightmost column and bottom row to 1
     for (let i = 0; i < m; i++) {
-        dp[i][0] = 1;
+        dp[i][n-1] = 1;
     }
     for (let j = 0; j < n; j++) {
-        dp[0][j] = 1;
+        dp[m-1][j] = 1;
     }
-
-    // 나머지 셀에 대한 경로 수 계산
-    for (let i = 1; i < m; i++) {
-        for (let j = 1; j < n; j++) {
-            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+    
+    // Fill in the DP array bottom-up
+    for (let i = m - 2; i >= 0; i--) {
+        for (let j = n - 2; j >= 0; j--) {
+            dp[i][j] = dp[i+1][j] + dp[i][j+1];
         }
     }
-
-    return dp[m - 1][n - 1];
+    
+    // Return the result stored in the top-left corner
+    return dp[0][0];
 };
