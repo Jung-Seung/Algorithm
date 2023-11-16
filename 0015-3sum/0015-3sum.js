@@ -3,80 +3,46 @@
  * @return {number[][]}
  */
 function threeSum(nums) {
-	const results = []
+    const results = [];
 
-	// obviously irrelevant if we don't have at least 3 numbers to play with!
-	if (nums.length < 3) return results
+    // 배열의 길이가 3보다 작으면 합이 0이 되는 조합이 존재하지 않으므로 빈 배열 반환
+    if (nums.length < 3) return results;
 
-	// having the numbers in ascending order will make this problem much easier.
-	// also, knowing the overall problem  will take at least O(N^2) time, we can
-	// afford the O(NlogN) sort operation
-	nums.sort((a, b) => a - b)
+    // 배열을 오름차순으로 정렬
+    nums.sort((a, b) => a - b);
+    let target = 0;
 
-    // if the question asks us for a custom target, we can control it here
-	let target = 0
+    // 첫 번째 숫자를 기준으로 루프
+    for (let i = 0; i < nums.length - 2; i++) {
+        // 현재 숫자가 타겟보다 크면 그 뒤의 숫자들도 모두 크므로 루프 중단
+        if (nums[i] > target) break;
 
-	for (let i = 0; i < nums.length - 2; i++) {
-		// `i` represents the "left" most number in our sorted set.
-		// once this number hits 0, there's no need to go further since
-		// positive numbers cannot sum to a negative number
-		if (nums[i] > target) break
+        // 중복된 숫자는 결과에 중복되지 않도록 스킵
+        if (i > 0 && nums[i] === nums[i - 1]) continue;
 
-		// we don't want repeats, so skip numbers we've already seen
-		if (i > 0 && nums[i] === nums[i - 1]) continue
+        // 두 번째와 세 번째 숫자의 인덱스를 설정
+        let j = i + 1;
+        let k = nums.length - 1;
 
-		// `j` represents the "middle" element between `i` and `k`.
-		// we will increment this up through the array while `i` and `k`
-		// are anchored to their positions. we will decrement `k` for
-		// for each pass through the array, and finally increment `i`
-		// once `j` and `k` meet.
-		let j = i + 1
-
-		// `k` represents the "right" most element
-		let k = nums.length - 1
-		
-		// to summarize our setup, we have `i` that starts at the beginning,
-		// `k` that starts at the end, and `j` that races in between the two.
-		//
-		// note that `i` is controlled by our outer for-loop and will move the slowest.
-		// in the meantime, `j` and `k` will take turns inching towards each other depending
-		// on some logic we'll set up below. once they collide, `i` will be incremented up
-		// and we'll repeat the process.
-
-		while (j < k) {
-			let sum = nums[i] + nums[j] + nums[k]
-
-			// if we find the target sum, increment `j` and decrement `k` for
-			// other potential combos where `i` is the anchor
-			if (sum === target) {
-				// store the valid threesum
-				results.push([nums[i], nums[j], nums[k]])
-
-				// this is important! we need to continue to increment `j` and decrement `k`
-				// as long as those values are duplicated. in other words, we wanna skip values
-				// we've already seen. otherwise, an input array of [-2,0,0,2,2] would result in
-				// [[-2,0,2], [-2,0,2]].
-				//
-				// (i'm not a fan of this part because we're doing a while loop as we're
-				// already inside of another while loop...)
-				while (nums[j] === nums[j + 1]) j++
-				while (nums[k] === nums[k - 1]) k--
-
-				// finally, we need to actually move `j` forward and `k` backward to the
-				// next unique elements. the previous while loops will not handle this.
-				j++
-				k--
-
-			// if the sum is too small, increment `j` to get closer to the target
-			} else if (sum < target) {
-				j++
-
-			// if the sum is too large, decrement `k` to get closer to the target
-			} else { // (sum > target)
-				k--
-			}
-		}
-	}
-
-	return results
-};
+        // 투 포인터 알고리즘을 사용하여 합이 0이 되는 조합을 찾음
+        while (j < k) {
+            let sum = nums[i] + nums[j] + nums[k];
+            if (sum === target) {
+                // 합이 0이 되는 조합을 찾았을 때, 결과 배열에 추가
+                results.push([nums[i], nums[j], nums[k]]);
+                // 중복된 숫자는 스킵
+                while (nums[j] === nums[j + 1]) j++;
+                while (nums[k] === nums[k - 1]) k--;
+                j++;
+                k--;
+            } else if (sum < target) {
+                // 합이 타겟보다 작으면 두 번째 숫자를 증가
+                j++;
+            } else {
+                // 합이 타겟보다 크면 세 번째 숫자를 감소
+                k--;
+            }
+        }
+    }
+    return results;
+}
