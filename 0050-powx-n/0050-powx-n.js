@@ -3,32 +3,24 @@
  * @param {number} n
  * @return {number}
  */
-/*
-    1. The function checks if n is equal to 0.
-    2. If it is, then the function simply returns 1.
-    3. Otherwise, the function checks if n is negative.
-    4. If it is, then the function negates x and sets n to the absolute value of n.
-    5. The function then checks if n is even.
-    6. If it is, then the function recursively calls itself to compute x(n/2)x^(n/2)x(n/2).
-    7. The result of this recursive call is then multiplied by itself to compute xnx^nx^n.
-    8. Otherwise, the function returns x∗myPow(x,n−1)x * myPow(x, n - 1)x∗myPow(x,n−1).
-*/
+
+// x의 n 승을 계산하는 함수
 var myPow = function(x, n) {
-  
+  // 지수가 0인 경우 항상 1을 반환
   if (n === 0) {
     return 1;
   }
-
+  // 지수가 음수인 경우, 밑을 역수로, 지수를 양수로 변경
   if (n < 0) {
     x = 1 / x;
     n = -n;
   }
-
+  // 지수가 짝수인 경우, 절반의 지수로 계산하여 제곱
   if (n % 2 === 0) {
-    
     let halfPower = myPow(x, n / 2);
     return halfPower * halfPower;
   }
+  // 지수가 홀수인 경우, 지수를 1 감소시켜 재귀적으로 계산
   else {
     return x * myPow(x, n - 1);
   }  
