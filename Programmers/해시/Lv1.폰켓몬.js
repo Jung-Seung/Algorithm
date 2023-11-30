@@ -24,16 +24,21 @@
 */
 
 function solution(nums) {
-    var answer = [];
+    var answer = []; // 최종 결과를 담을 배열
+
+    // 최대 선택할 수 있는 종류의 절반을 계산
     var max = nums.length / 2;
-    for(let i = 0; i < nums.length; i++) {
-        if(answer.length < max) {
-            if(!answer.includes(nums[i])) {
+
+    for (let i = 0; i < nums.length; i++) {
+        // answer 배열의 길이가 최대 선택할 수 있는 종류의 절반보다 작을 때
+        if (answer.length < max) {
+            // 현재 숫자가 answer 배열에 포함되어 있지 않으면 추가
+            if (!answer.includes(nums[i])) {
                 answer.push(nums[i]);
             }
         }
     }
-    return answer.length;    
+    return answer.length; // 결과 배열의 길이 반환
 }
 
 /*
@@ -50,10 +55,16 @@ answer 배열의 길이가 max보다 작은 경우에만 선택을 수행합니�
 answer 배열의 길이를 반환합니다. 이는 선택된 숫자들의 개수를 나타냅니다.
 */
 
-//다른 사람 풀이
-const solution = nums => {
-    let answer = [...new Set(nums)],
-        limit = nums.length / 2;
 
+//다른 사람 풀이
+
+// 중복을 제거한 배열을 만들기 위해 Set을 사용하여 중복을 제거
+const solution = nums => {
+    let answer = [...new Set(nums)]; // 중복이 제거된 배열
+
+    // 선택할 수 있는 최대 종류의 절반
+    let limit = nums.length / 2;
+
+    // 만약 중복이 제거된 배열의 길이가 최대 종류의 절반보다 크다면 limit을 반환, 그렇지 않다면 중복이 제거된 배열의 길이를 반환
     return answer.length > limit ? limit : answer.length;
 }
