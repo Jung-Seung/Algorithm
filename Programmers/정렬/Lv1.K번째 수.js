@@ -17,15 +17,21 @@ commands의 모든 원소에 대해 앞서 설명한 연산을 적용했을 때 
 - commands의 각 원소는 길이가 3입니다.
 */
 
+// 주어진 배열에서 일련의 명령에 따라 부분 배열을 추출하고 정렬한 뒤, k번째 원소를 구하는 함수
 function solution(array, commands) {
-    const answer = [];
+    const answer = []; // 결과를 담을 배열
+    // 주어진 명령의 수만큼 반복
     for (let i = 0; i < commands.length; i++) {
+        // 현재 명령에서 start, end, k 값을 구조 분해 할당
         const [start, end, k] = commands[i];
+        // 배열에서 start 위치부터 end 위치까지의 부분 배열 추출
         const sliced = array.slice(start - 1, end);
+        // 추출한 부분 배열을 오름차순으로 정렬
         const sorted = sliced.sort((a, b) => a - b);
+        // 정렬된 부분 배열에서 k번째 원소를 결과 배열에 추가
         answer.push(sorted[k - 1]);
     }
-    return answer;
+    return answer; // 최종적으로 구한 결과 배열 반환
 }
 
 // 풀이
