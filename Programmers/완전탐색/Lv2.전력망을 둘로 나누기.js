@@ -17,41 +17,51 @@ n	wires	                                            result
 7	[[1,2],[2,7],[3,7],[3,4],[4,5],[6,7]]	            1
 */
 
+// 전력망을 나타내는 그래프에서 하나의 전선을 끊어 두 개의 서브 트리로 나누었을 때,
+// 두 서브 트리의 노드 개수 차이의 최솟값을 구하는 함수.
 function solution(n, wires) {
+    // 결과값 초기화
     var answer = Number.MAX_SAFE_INTEGER;
-    //트리 만들기
-    let tree = Array.from(Array(n+1),()=>[])
-    wires.map((element)=>{
-        let [a,b] = element;
+    
+    // 트리 구조를 저장할 배열
+    let tree = Array.from(Array(n + 1), () => []);
 
+    // 주어진 간선 정보를 기반으로 트리를 생성
+    wires.map((element) => {
+        let [a, b] = element;
         tree[a].push(b);
         tree[b].push(a);
-    })
-   
+    });
+
+    // 주어진 루트 노드를 기준으로 서브 트리의 노드 개수를 반환하는 함수
     function searchTree(root, exceptNum) {
-        let count =0;
+        let count = 0;
         let visit = [];
         let queue = [root];
         visit[root] = true;
-        while(queue.length){
+
+        // BFS를 통해 서브 트리의 노드 개수 계산
+        while (queue.length) {
             let index = queue.pop();
-            tree[index].forEach((element)=>{
-                if(element !== exceptNum && visit[element]!==true){
+            tree[index].forEach((element) => {
+                if (element !== exceptNum && visit[element] !== true) {
                     visit[element] = true;
                     queue.push(element);
                 }
-            })
+            });
             count++;
         }
-        
+
         return count;
     }
 
-    // wires 값에 만든 함수에 값을 넣어 최솟값을 찾음.
-    wires.forEach(element => {
-        let[a,b] = element;
-        answer = Math.min(answer, Math.abs(searchTree(a,b)-searchTree(b,a)))
+    // 모든 간선에 대해 함수를 적용하여 최솟값을 찾음
+    wires.forEach((element) => {
+        let [a, b] = element;
+        answer = Math.min(answer, Math.abs(searchTree(a, b) - searchTree(b, a)));
     });
+
+    // 최종 결과 반환
     return answer;
 }
 
