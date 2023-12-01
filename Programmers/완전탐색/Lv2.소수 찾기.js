@@ -26,39 +26,45 @@ numbers	    return
 */
 
 // 방법 1
+// 주어진 숫자 배열에서 만들 수 있는 순열 중 소수인 숫자의 개수를 반환하는 함수.
 function solution(numbers) {
-    return [...new Set(getPer(numbers))].filter(v => isPrime(v)).length;
+    // 중복을 제거하고 소수인 숫자의 개수를 세서 반환
+    return [...new Set(getPermutations(numbers))].filter((v) => isPrime(v)).length;
 }
 
-const getPer = (str) => {
-    const answer = [];
-    const n = str.length;
-    let ch = Array.from({ length: n }, () => 0);
-    
+// 숫자의 순열을 구하는 함수.
+const getPermutations = (arr) => {
+    const result = [];
+    const n = arr.length;
+    let visited = Array.from({ length: n }, () => 0);
+
+    // 깊이 우선 탐색을 통해 순열을 생성하는 함수.
     const dfs = (curStr) => {
-        answer.push(+curStr);
+        result.push(+curStr);
+
         for (let i = 0; i < n; i++) {
-            if (ch[i] === 0) {
-                ch[i] = 1;
-                dfs(curStr + str[i]);
-                ch[i] = 0;
+            if (visited[i] === 0) {
+                visited[i] = 1;
+                dfs(curStr + arr[i]);
+                visited[i] = 0;
             }
         }
-    }
+    };
     dfs('');
-    answer.shift();
-    return answer;
-}
+    result.shift(); // 첫 번째 원소는 빈 문자열이므로 제거
+    return result;
+};
 
-const isPrime = (n) => {
-    if (n === 0 || n === 1) return false;
-    for (let i = 2; i <= Math.sqrt(n); i++) {
-        if (n % i === 0) {
+// 주어진 숫자가 소수인지 여부를 판별하는 함수.
+const isPrime = (num) => {
+    if (num === 0 || num === 1) return false;
+    for (let i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i === 0) {
             return false;
         }
     }
     return true;
-}
+};
 
 /*
 getPer 함수: 순열을 구하는 함수입니다. 재귀적으로 가능한 모든 순열을 생성합니다. dfs 함수를 사용하여 현재 만들어진 순열을 기록하고, 해당 순열을 숫자로 변환하여 answer 배열에 저장합니다. 
@@ -71,7 +77,9 @@ solution 함수: 주어진 numbers 배열을 이용하여 가능한 모든 순�
 */
 
 // 방법 1 - 최적화
+// 주어진 숫자 배열에서 만들 수 있는 순열 중 소수인 숫자의 개수를 반환하는 함수.
 function solution(numbers) {
+    // 주어진 숫자가 소수인지 여부를 판별하는 함수.
     const isPrime = (n) => {
         if (n < 2) return false;
         for (let i = 2; i * i <= n; i++) {
@@ -80,8 +88,10 @@ function solution(numbers) {
         return true;
     }
 
+    // 주어진 배열로부터 길이가 n인 순열을 구하는 함수.
     const getPermutations = (arr, n) => {
         const results = [];
+        // 기저 조건: 길이가 1이면 각 원소를 문자열로 변환하여 반환
         if (n === 1) return arr.map(String);
         
         for (let i = 0; i < arr.length; i++) {
@@ -94,7 +104,7 @@ function solution(numbers) {
 
         return results;
     }
-
+    // 중복을 제거한 유일한 순열을 구하고 숫자로 변환하여 소수 여부를 판별한 후 개수를 반환
     const uniquePermutations = new Set(getPermutations(numbers.split(""), numbers.length));
     return Array.from(uniquePermutations)
         .map(Number)
@@ -187,47 +197,64 @@ checkPrimeNumber 함수:
 */
 
 // 방법 2 - 개선
+// 주어진 숫자 문자열에서 만들 수 있는 숫자 중 소수인 숫자의 개수를 반환하는 함수.
 function solution(numbers) {
+    // 숫자를 담은 배열을 만듭니다. 각 자리의 숫자를 ['', cur] 형태로 저장합니다.
     const numberList = numbers.split('').reduce((prev, cur) => {
         prev.push(['', cur]);
         return prev;
     }, []);
 
-    const primeNumbers = new Array();
+    // 소수를 담을 배열을 초기화합니다.
+    const primeNumbers = [];
+
+    // 가능한 숫자를 만드는 함수를 호출하여 소수인 숫자를 찾습니다.
     makeNumbers(numberList);
 
+    // 찾은 소수의 개수를 반환합니다.
     return primeNumbers.filter(number => checkPrimeNumber(number)).length;
 }
 
+// 주어진 배열에서 가능한 모든 숫자 조합을 생성하는 재귀 함수.
 function makeNumbers(list, checkedIndices = [], numbers = []) {
+    // 모든 자릿수를 확인한 경우, 배열에 있는 숫자를 합쳐 소수 배열에 추가합니다.
     if (list.length === checkedIndices.length) {
         const number = parseInt(numbers.join(''));
         primeNumbers.push(number);
         return;
     }
 
+    // 현재 자릿수에서 가능한 모든 조합을 확인합니다.
     for (let i = 0; i < list.length; i++) {
         if (!checkedIndices.includes(i)) {
             checkedIndices.push(i);
+
+            // 0 또는 1을 추가하고 재귀 호출합니다.
             for (let j = 0; j < 2; j++) {
                 numbers.push(list[i][j]);
                 makeNumbers(list, checkedIndices, numbers);
                 numbers.pop();
             }
+
             checkedIndices.pop();
         }
     }
 }
 
+// 주어진 숫자가 소수인지 여부를 판별하는 함수.
 function checkPrimeNumber(number) {
+    // 0 또는 1, NaN인 경우 소수가 아닙니다.
     if (number === 0 || number === 1 || isNaN(number)) {
         return false;
     }
+
+    // 2부터 제곱근까지의 숫자로 나누어 소수 여부를 판별합니다.
     for (let i = 2; i <= Math.sqrt(number); i++) {
         if (number % i === 0) {
             return false;
         }
     }
+
     return true;
 }
 
