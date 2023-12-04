@@ -31,20 +31,27 @@ numbers	            target	return
 */
 
 function solution(numbers, target) {
+    // 결과를 저장할 변수
     var answer = 0;
+    // 주어진 숫자 배열의 길이
     var length = numbers.length;
-    
-    function DFS(len,sum){
-        if(len===length){
-            if(sum === target){
+    // 깊이 우선 탐색을 수행하는 함수
+    function DFS(len, sum) {
+        // 모든 숫자를 다 사용한 경우
+        if (len === length) {
+            // 현재까지의 합이 목표값과 일치하면 결과를 증가
+            if (sum === target) {
                 answer++;
             }
-        }
-        else{
-            return DFS(len+1,sum+numbers[len]),DFS(len+1,sum-numbers[len]);
+        } else {
+            // 현재 숫자를 더하거나 빼서 다음 단계로 진행
+            // 재귀 호출을 통해 가능한 모든 경우를 탐색
+            return DFS(len + 1, sum + numbers[len]), DFS(len + 1, sum - numbers[len]);
         }
     }
-    DFS(0,0);
+    // 초기 호출: 깊이 우선 탐색 시작
+    DFS(0, 0);
+    // 최종적으로 가능한 경우의 수를 반환
     return answer;
 }
 
