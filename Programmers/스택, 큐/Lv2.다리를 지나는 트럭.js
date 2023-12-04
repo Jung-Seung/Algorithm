@@ -30,20 +30,29 @@ bridge_length	weight	truck_weights	                    return
 */
 
 function solution(bridge_length, weight, truck_weights) {
-    const bridge = Array.from({length : bridge_length}, _ => 0);
+    // 다리를 나타내는 배열 초기화 (길이는 bridge_length, 초기값은 0)
+    const bridge = Array.from({ length: bridge_length }, _ => 0);
+    // 현재 다리 위의 총 무게 및 경과 시간 초기화
     let curWeight = 0;
     let time = 0;
-    while(truck_weights.length){
+    // 모든 트럭이 다리를 건널 때까지 반복
+    while (truck_weights.length) {
+        // 시간 증가
         time++;
+        // 다리에서 나가는 트럭의 무게를 현재 다리 위의 총 무게에서 뺌
         curWeight -= bridge.shift();
-        if(curWeight + truck_weights[0] > weight){
+        // 새로 들어올 트럭이 다리의 무게 제한을 초과하는지 확인
+        if (curWeight + truck_weights[0] > weight) {
+            // 초과한다면 다리에는 0을 추가하여 트럭이 들어가지 않고 대기
             bridge.push(0);
         } else {
+            // 초과하지 않는다면 현재 트럭을 다리에 추가하고 현재 다리 위의 총 무게를 갱신
             const curTruck = truck_weights.shift();
             bridge.push(curTruck);
             curWeight += curTruck;
         }
-    }
+    } 
+    // 마지막 트럭이 다리를 빠져나가는데 걸린 시간(초)과 다리의 길이를 더하여 총 시간 반환
     return time + bridge_length;
 }
 
