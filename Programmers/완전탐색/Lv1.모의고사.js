@@ -16,22 +16,29 @@
 
 // 방법 1
 function solution(answers) {
+    // 수포자들의 패턴
     const patterns = [
-      [1, 2, 3, 4, 5],
-      [2, 1, 2, 3, 2, 4, 2, 5],
-      [3, 3, 1, 1, 2, 2, 4, 4, 5, 5]
-    ]
+        [1, 2, 3, 4, 5],
+        [2, 1, 2, 3, 2, 4, 2, 5],
+        [3, 3, 1, 1, 2, 2, 4, 4, 5, 5]
+    ];
+    // 각 수포자들의 점수를 계산
     const scores = patterns.map(pattern =>
-      answers.reduce((score, answer, idx) =>
-        score + (answer === pattern[idx % pattern.length] ? 1 : 0),
-        0)
-    )
-    const maxScore = Math.max(...scores)
+        answers.reduce((score, answer, idx) =>
+            // 정답과 패턴을 비교하여 일치하면 1을 더함
+            score + (answer === pattern[idx % pattern.length] ? 1 : 0),
+            0)
+    );
+    // 최고 점수를 찾음
+    const maxScore = Math.max(...scores);
+    // 최고 점수를 받은 수포자들을 찾아서 반환
     const answer = scores.reduce((acc, score, idx) =>
-      score === maxScore ? [...acc, idx + 1] : acc,
-      [])
-    return answer
+        score === maxScore ? [...acc, idx + 1] : acc,
+        []);
+    
+    return answer;
 }
+
 // 풀이
 /*
 수포자들의 찍기 패턴을 patterns 배열에 저장하고, map 함수를 사용하여 각 수포자의 점수를 계산합니다.
@@ -63,22 +70,26 @@ reduce 함수를 사용하여 scores 배열을 순회하면서 가장 높은 점
 
 // 방법 2
 function solution(answers) {
-    var answer = []
-    var a1 = [1, 2, 3, 4, 5]
-    var a2 = [2, 1, 2, 3, 2, 4, 2, 5]
-    var a3 = [ 3, 3, 1, 1, 2, 2, 4, 4, 5, 5]
+    // 각 학생이 찍은 답안 패턴
+    var a1 = [1, 2, 3, 4, 5];
+    var a2 = [2, 1, 2, 3, 2, 4, 2, 5];
+    var a3 = [3, 3, 1, 1, 2, 2, 4, 4, 5, 5];
 
-    var a1c = answers.filter((a,i)=> a === a1[i%a1.length]).length
-    var a2c = answers.filter((a,i)=> a === a2[i%a2.length]).length
-    var a3c = answers.filter((a,i)=> a === a3[i%a3.length]).length
-    var max = Math.max(a1c,a2c,a3c);
+    // 각 학생이 맞힌 문제 수 계산
+    var a1c = answers.filter((a, i) => a === a1[i % a1.length]).length;
+    var a2c = answers.filter((a, i) => a === a2[i % a2.length]).length;
+    var a3c = answers.filter((a, i) => a === a3[i % a3.length]).length;
 
+    // 가장 많이 맞힌 문제 수 계산
+    var max = Math.max(a1c, a2c, a3c);
+
+    // 가장 많이 맞힌 학생(들)의 번호 저장
+    var answer = [];
     if (a1c === max) {answer.push(1)}
     if (a2c === max) {answer.push(2)}
     if (a3c === max) {answer.push(3)}
 
-
-    return answer
+    return answer;
 }
 
 /*
