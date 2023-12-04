@@ -33,28 +33,35 @@ progresses	                speeds	            return
 
 // 방법 1
 function solution(progresses, speeds) {
+    // 결과를 저장할 배열
     var answer = [];
+    // 현재 확인 중인 작업의 인덱스
     var curLocation = 0;
-    
-    while(curLocation < progresses.length){
-        for(let i=curLocation;i<progresses.length;i++){
+    // 모든 작업이 완료될 때까지 반복
+    while (curLocation < progresses.length) {
+        // 각 작업의 진행 상태를 갱신
+        for (let i = curLocation; i < progresses.length; i++) {
             progresses[i] += speeds[i];
         }
+        // 현재 위치부터 작업이 완료된 개수를 세는 변수
         let count = 0;
-        for(let i=curLocation;i<progresses.length;i++){
-            if(progresses[i] >= 100){
-                count++
+        // 현재 위치부터 작업이 완료되었는지 확인
+        for (let i = curLocation; i < progresses.length; i++) {
+            if (progresses[i] >= 100) {
+                count++;
             } else {
+                // 작업이 아직 완료되지 않았다면 더 이상 확인하지 않음
                 break;
             }
         }
-        if(count > 0){
+        // 완료된 작업이 있으면
+        if (count > 0) {
+            // 현재 위치를 완료된 작업의 다음 위치로 갱신하고, 완료된 작업의 개수를 결과 배열에 추가
             curLocation += count;
             answer.push(count);
         }
     }
-    
-    
+    // 최종적으로 완료된 작업들의 개수를 배열로 반환
     return answer;
 }
 
@@ -81,17 +88,25 @@ count가 0보다 큰 경우, 배포된 기능이 있는 것이므로 curLocation
 
 // 방법 2
 function solution(progresses, speeds) {
+    // 결과를 저장할 배열
     const answer = [];
+    // 진행 상태가 100%가 되기까지의 최대 날짜
     let days = 0;
+    // 모든 작업에 대해 반복
     for (let i = 0; i < progresses.length; i++) {
-        const needDays = Math.ceil((100 - progresses[i]) / speeds[i]); 
-        if(needDays > days) {
+        // 해당 작업이 완료되기까지 필요한 날짜 계산
+        const needDays = Math.ceil((100 - progresses[i]) / speeds[i]);
+        // 이전 작업들보다 더 오래 걸린다면
+        if (needDays > days) {
+            // 최대 날짜를 갱신하고, 새로운 작업으로 인한 완료된 작업 개수(1)를 결과 배열에 추가
             days = needDays;
             answer.push(1);
         } else {
+            // 현재 작업이 이전 작업과 동시에 완료되면 이전 작업의 완료된 작업 개수를 증가
             answer[answer.length - 1]++;
         }
     }
+    // 최종적으로 완료된 작업들의 개수를 배열로 반환
     return answer;
 }
 
