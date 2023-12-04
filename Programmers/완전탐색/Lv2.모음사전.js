@@ -31,28 +31,29 @@ word	    result
 
 function solution(word) {
     var answer = 0;
-    // 모음 리스트 만든다
     const wordList = ['A', 'E', 'I', 'O', 'U'];
-    nextWord([]);
-    // 사전 순서에 맞게 다음 단어를 만든다
-    function nextWord(curWord, length = 0){
-        // 만들어진 단어가 입력된 단어(word)와 같을 때, 몇번째 단어인지 반환
-        if(word.length === length && curWord.every((value, idx) => value === word[idx])){
+    // 재귀적으로 다음 단어를 생성하고 비교하는 함수
+    function nextWord(curWord, length = 0) {
+        // 기저 조건: 주어진 단어와 현재까지 생성된 단어가 동일하면 true 반환
+        if (word.length === length && curWord.every((value, idx) => value === word[idx])) {
             return true;
-        } else if(length >= 5) {
+        } else if (length >= 5) {
             return false;
         }
-        for(let i=0;i<wordList.length;i++){
+        // wordList의 각 문자를 현재 단어에 추가하면서 재귀 호출
+        for (let i = 0; i < wordList.length; i++) {
             curWord.push(wordList[i]);
-            answer++;
-            if(nextWord(curWord, curWord.length)){
+            answer++; // 단어가 추가될 때마다 answer 증가
+            // 재귀 호출
+            if (nextWord(curWord, curWord.length)) {
                 return true;
             }
-            curWord.pop();
+            curWord.pop(); // 현재 추가한 문자를 다시 제거 (백트래킹)
         }
         return false;
     }
-    
+    // 함수 호출 시작
+    nextWord([]);
     return answer;
 }
 
@@ -68,22 +69,31 @@ function solution(word) {
 */
 
 function solution(word) {
+    // 주어진 문자 리스트
     const wordList = ['A', 'E', 'I', 'O', 'U'];
+    // 정답을 저장할 변수 초기화
     let answer = 0;
+    // BFS를 위한 큐 초기화. 초기값은 빈 문자열
     let queue = [''];
-    
+
+    // BFS 탐색
     while (queue.length > 0) {
+        // 큐에서 현재 단어를 꺼내옴
         const curWord = queue.shift();
+        // 정답 증가
         answer++;
+        // 현재 단어가 입력된 단어와 일치하면 종료
         if (curWord === word) {
             break;
         }
+        // 현재 단어의 길이가 5 미만이면 다음 글자를 추가하여 큐에 삽입
         if (curWord.length < 5) {
             for (let i = 0; i < wordList.length; i++) {
                 queue.push(curWord + wordList[i]);
             }
         }
     }
+    // 최종 정답 반환
     return answer;
 }
 
