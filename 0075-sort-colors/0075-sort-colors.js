@@ -3,24 +3,16 @@
  * @return {void} Do not return anything, modify nums in-place instead.
  */
 var sortColors = function(nums) {
-    let low = 0; // 0을 나타내는 영역의 오른쪽 경계
-    let high = nums.length - 1; // 2를 나타내는 영역의 왼쪽 경계
-    let i = 0; // 현재 위치를 나타내는 포인터
-
-    // 현재 위치가 2를 나타내는 영역을 벗어나면 종료
-    while (i <= high) {
-        if (nums[i] === 0) {
-            // 현재 위치의 값이 0이면 0을 나타내는 영역의 오른쪽으로 이동
-            [nums[i], nums[low]] = [nums[low], nums[i]]; // 스왑
-            low++;
-            i++;
-        } else if (nums[i] === 2) {
-            // 현재 위치의 값이 2이면 2를 나타내는 영역의 왼쪽으로 이동
-            [nums[i], nums[high]] = [nums[high], nums[i]]; // 스왑
-            high--;
-        } else {
-            // 현재 위치의 값이 1이면 그대로 유지하고 다음 위치로 이동
-            i++;
+    // 배열의 끝에서부터 시작하여 처음까지 반복
+    for (let i = nums.length - 1; i > 0; i--) {
+        // 현재 인덱스보다 작은 인덱스까지 반복
+        for (let j = 0; j <= i - 1; j++) {
+            // 현재 인덱스의 값이 다음 인덱스의 값보다 크면 스왑
+            if (nums[j] > nums[j + 1]) {
+                let temp = nums[j + 1];
+                nums[j + 1] = nums[j];
+                nums[j] = temp;
+            }
         }
     }
 };
