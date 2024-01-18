@@ -11,27 +11,36 @@
  * @return {ListNode}
  */
 var partition = function(head, x) {
-    // 작은 값들을 저장할 연결 리스트와 크거나 같은 값들을 저장할 연결 리스트를 생성
-    let beforeHead = new ListNode(0);
-    let before = beforeHead;
-    let afterHead = new ListNode(0);
-    let after = afterHead;
+    // 파티션의 앞과 뒤를 나타내는 더미 노드 생성
+    let frontDummy = new ListNode(0);
+    let backDummy = new ListNode(0);
 
-    // 주어진 연결 리스트를 탐색하여 작은 값과 크거나 같은 값으로 분리
-    while (head !== null) {
-        if (head.val < x) {
-            before.next = head;
-            before = before.next;
+    // 앞과 뒤를 가리키는 포인터 생성
+    let front = frontDummy;
+    let back = backDummy;
+
+    // 주어진 연결 리스트를 순회하면서 파티션 진행
+    let current = head;
+    while (current) {
+        if (current.val < x) {
+            // 현재 노드가 기준값보다 작으면 파티션 앞에 추가
+            front.next = current;
+            front = current;
         } else {
-            after.next = head;
-            after = after.next;
+            // 현재 노드가 기준값보다 크거나 같으면 파티션 뒤에 추가
+            back.next = current;
+            back = current;
         }
-        head = head.next;
+        // 다음 노드로 이동
+        current = current.next;
     }
 
-    // 두 파티션을 연결
-    after.next = null; // 크거나 같은 값들 파티션의 끝을 설정
-    before.next = afterHead.next; // 작은 값들 파티션의 끝을 크거나 같은 값들 파티션의 처음과 연결
+    // 파티션의 뒤 노드의 다음을 null로 설정하여 파티션 완료
+    back.next = null;
 
-    return beforeHead.next; // 최종적인 파티션이 완료된 연결 리스트의 헤드 노드 반환
+    // 앞 파티션의 끝을 뒷 파티션의 처음에 연결
+    front.next = backDummy.next;
+
+    // 최종 파티션이 완료된 연결 리스트의 헤드 노드 반환
+    return frontDummy.next;
 };
