@@ -11,16 +11,29 @@
  * @return {ListNode}
  */
 var addTwoNumbers = function(l1, l2) {
-    const iter = (n1, n2, rest = 0) => {
-        // 두 연결 리스트가 끝에 도달하고, 올림 값이 없는 경우 null을 반환합니다.
-        if (!n1 && !n2 && !rest) return null;
-        // 현재 자리의 숫자를 계산합니다.
-        const newVal = (n1?.val || 0) + (n2?.val || 0) + rest;
-        // 다음 자리의 노드를 재귀적으로 계산합니다.
-        const nextNode = iter(n1?.next, n2?.next, Math.floor(newVal / 10));
-        // 현재 노드를 생성하고 반환합니다.
-        return new ListNode(newVal % 10, nextNode);
+    // 결과를 담을 새로운 링크드 리스트 생성
+    const node = new ListNode();
+    // 결과 링크드 리스트의 임시 노드 설정
+    let tmpNode = node;
+    // 올림 값 초기화
+    let carry = 0;
+    // 두 리스트 중 하나라도 남아있거나 올림 값이 있는 동안 반복
+    while (l1 || l2 || carry) {
+        // 새 노드 생성 후 연결
+        tmpNode.next = new ListNode();
+        tmpNode = tmpNode.next;
+        // 현재 노드의 값 계산
+        const left = l1 ? l1.val : 0;
+        const right = l2 ? l2.val : 0;
+        let sum = left + right + carry;
+        const value = sum < 10 ? sum : sum % 10; // 합이 10 미만인 경우 value는 sum, 그렇지 않으면 sum을 10으로 나눈 나머지
+        carry = sum < 10 ? 0 : 1; // 합이 10 미만이면 올림 값은 0, 그렇지 않으면 1
+        tmpNode.val = value; // 현재 노드에 값 설정
+        
+        // 다음 노드로 이동
+        l1 = l1 ? l1.next : null;
+        l2 = l2 ? l2.next : null;
     }
-    // 초기 호출로 결과를 반환합니다.
-    return iter(l1, l2);
+    // 결과 링크드 리스트 반환
+    return node.next;
 };
