@@ -2,35 +2,33 @@
  * @param {string} s
  * @return {number}
  */
-// 로마 숫자를 정수로 변환하는 함수
 var romanToInt = function(s) {
-    // 결과를 저장할 변수 초기화
-    let result = 0;
-    // 로마 숫자에 대응하는 값을 저장한 객체 정의
+    // 각 로마 숫자에 대한 값
     const value = {
-        "I" : 1,
-        "V" : 5,
-        "X" : 10,
-        "L" : 50,
-        "C" : 100,
-        "D" : 500,
-        "M" : 1000 
-    }
-    // 문자열을 순회하며 로마 숫자를 정수로 변환
-    for(let i = 0; i < s.length; i++) {
-        // 현재 문자에 대응하는 값과 다음 문자에 대응하는 값을 가져옴
-        let current = value[s[i]];
-        let next = value[s[i+1]];
-        // 현재 값이 다음 값보다 작으면 (현재 값이 작은 자리에 있으면)
-        if(current < next) {
-            // 결과에는 다음 값에서 현재 값을 뺀 값을 더하고, 인덱스를 한 칸 앞으로 이동
-            result += next - current;
-            i++;
+        "I": 1,
+        "V": 5,
+        "X": 10,
+        "L": 50,
+        "C": 100,
+        "D": 500,
+        "M": 1000
+    };
+
+    let result = 0;
+
+    // 로마 숫자를 순회하면서 변환
+    for (let i = 0; i < s.length; i++) {
+        let current = value[s[i]]; // 현재 문자에 대한 값
+        let next = value[s[i + 1]]; // 다음 문자에 대한 값
+
+        // 다음 문자의 값이 현재 문자의 값보다 크다면 (예: IV, IX, XL 등)
+        if (current < next) {
+            result += next - current; // 다음 문자의 값에서 현재 문자의 값을 뺀 값을 결과에 더함
+            i++; // 다음 문자는 이미 처리했으므로 인덱스를 한 칸 더 이동
         } else {
-            // 그렇지 않으면 현재 값을 더함
-            result += current;
+            result += current; // 그 외의 경우 현재 문자의 값을 결과에 더함
         }
     }
-    // 최종 결과 반환
-    return result;
+
+    return result; // 변환된 정수 반환
 };
