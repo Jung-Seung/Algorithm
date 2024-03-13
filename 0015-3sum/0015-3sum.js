@@ -2,47 +2,28 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
-function threeSum(nums) {
-    const results = [];
-
-    // 배열의 길이가 3보다 작으면 합이 0이 되는 조합이 존재하지 않으므로 빈 배열 반환
-    if (nums.length < 3) return results;
-
-    // 배열을 오름차순으로 정렬
-    nums.sort((a, b) => a - b);
-    let target = 0;
-
-    // 첫 번째 숫자를 기준으로 루프
-    for (let i = 0; i < nums.length - 2; i++) {
-        // 현재 숫자가 타겟보다 크면 그 뒤의 숫자들도 모두 크므로 루프 중단
-        if (nums[i] > target) break;
-
-        // 중복된 숫자는 결과에 중복되지 않도록 스킵
-        if (i > 0 && nums[i] === nums[i - 1]) continue;
-
-        // 두 번째와 세 번째 숫자의 인덱스를 설정
-        let j = i + 1;
-        let k = nums.length - 1;
-
-        // 투 포인터 알고리즘을 사용하여 합이 0이 되는 조합을 찾음
-        while (j < k) {
-            let sum = nums[i] + nums[j] + nums[k];
-            if (sum === target) {
-                // 합이 0이 되는 조합을 찾았을 때, 결과 배열에 추가
-                results.push([nums[i], nums[j], nums[k]]);
-                // 중복된 숫자는 스킵
-                while (nums[j] === nums[j + 1]) j++;
-                while (nums[k] === nums[k - 1]) k--;
-                j++;
-                k--;
-            } else if (sum < target) {
-                // 합이 타겟보다 작으면 두 번째 숫자를 증가
-                j++;
-            } else {
-                // 합이 타겟보다 크면 세 번째 숫자를 감소
-                k--;
+var threeSum = function(nums) {
+    let result = []; // 결과 세 개의 숫자 쌍을 저장하는 배열
+    let sortedNums = nums.sort((a,b) => a-b); // 입력 배열을 오름차순으로 정렬합니다.
+    for (let i = 0; i < sortedNums.length - 1; i++) { // 정렬된 배열을 반복하여 검사합니다.
+        if (i !== 0 && sortedNums[i] === sortedNums[i - 1]) { // 중복된 요소는 건너뜁니다.
+            continue;
+        }
+        let num1 = sortedNums[i]; // 삼중항에서 첫 번째 숫자
+        let map = new Map(); // 보수값을 저장하기 위한 맵
+        let target1 = num1 * (-1); // 보수 쌍을 찾기 위한 목표값
+        for (let j = i + 1; j < sortedNums.length; j++) { // 나머지 요소들을 반복하여 검사합니다.
+            let num2 = sortedNums[j]; // 삼중항에서 두 번째 숫자
+            let k = map.get(target1 - num2); // 맵에서 보수가 있는지 확인합니다.
+            if (sortedNums[j] === sortedNums[j + 1]) { // 중복된 요소는 건너뜁니다.
+                map.set(num2, j);
+                continue;
             }
+            if ((k !== undefined) && (i !== j) && (j !== k) && (k !== i)) { // 유효한 삼중항을 확인합니다.
+                result.push([num1, num2, sortedNums[k]]); // 유효한 삼중항을 결과 배열에 추가합니다.
+            }
+            map.set(num2, j); // 현재 숫자로 맵을 업데이트합니다.
         }
     }
-    return results;
-}
+    return result; // 세 개의 숫자 쌍으로 이루어진 배열을 반환합니다.
+};
