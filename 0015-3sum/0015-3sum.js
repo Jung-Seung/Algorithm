@@ -3,27 +3,27 @@
  * @return {number[][]}
  */
 var threeSum = function(nums) {
-    let result = []; // 결과 세 개의 숫자 쌍을 저장하는 배열
-    let sortedNums = nums.sort((a,b) => a-b); // 입력 배열을 오름차순으로 정렬합니다.
-    for (let i = 0; i < sortedNums.length - 1; i++) { // 정렬된 배열을 반복하여 검사합니다.
-        if (i !== 0 && sortedNums[i] === sortedNums[i - 1]) { // 중복된 요소는 건너뜁니다.
-            continue;
-        }
-        let num1 = sortedNums[i]; // 삼중항에서 첫 번째 숫자
-        let map = new Map(); // 보수값을 저장하기 위한 맵
-        let target1 = num1 * (-1); // 보수 쌍을 찾기 위한 목표값
-        for (let j = i + 1; j < sortedNums.length; j++) { // 나머지 요소들을 반복하여 검사합니다.
-            let num2 = sortedNums[j]; // 삼중항에서 두 번째 숫자
-            let k = map.get(target1 - num2); // 맵에서 보수가 있는지 확인합니다.
-            if (sortedNums[j] === sortedNums[j + 1]) { // 중복된 요소는 건너뜁니다.
-                map.set(num2, j);
-                continue;
+    const res = []; // 결과 배열
+    nums.sort((a, b) => a - b); // 배열을 오름차순으로 정렬합니다.
+    
+    for (let i = 0; i < nums.length - 2; i++) { // 배열을 순회합니다.
+        if (i === 0 || nums[i] !== nums[i - 1]) { // 중복된 숫자를 건너뜁니다.
+            let lo = i + 1, hi = nums.length - 1, sum = 0 - nums[i]; // 두 개의 포인터 및 목표 합을 설정합니다.
+            while (lo < hi) { // 포인터가 만날 때까지 반복합니다.
+                if (nums[lo] + nums[hi] === sum) { // 합이 목표와 같은 경우
+                    res.push([nums[i], nums[lo], nums[hi]]); // 결과 배열에 삼중항을 추가합니다.
+                    while (lo < hi && nums[lo] === nums[lo + 1]) lo++; // 중복된 숫자를 건너뜁니다.
+                    while (lo < hi && nums[hi] === nums[hi - 1]) hi--; // 중복된 숫자를 건너뜁니다.
+                    lo++; // 다음 숫자로 이동합니다.
+                    hi--; // 다음 숫자로 이동합니다.
+                } else if (nums[lo] + nums[hi] < sum) { // 합이 목표보다 작은 경우
+                    lo++; // 작은 값을 증가시킵니다.
+                } else { // 합이 목표보다 큰 경우
+                    hi--; // 큰 값을 감소시킵니다.
+                }
             }
-            if ((k !== undefined) && (i !== j) && (j !== k) && (k !== i)) { // 유효한 삼중항을 확인합니다.
-                result.push([num1, num2, sortedNums[k]]); // 유효한 삼중항을 결과 배열에 추가합니다.
-            }
-            map.set(num2, j); // 현재 숫자로 맵을 업데이트합니다.
         }
     }
-    return result; // 세 개의 숫자 쌍으로 이루어진 배열을 반환합니다.
+    
+    return res; // 결과 배열을 반환합니다.
 };
