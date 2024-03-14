@@ -4,38 +4,28 @@
  * @return {number}
  */
 var threeSumClosest = function(nums, target) {
-    // 결과 변수 및 초기값 설정
-    let result = Number.MAX_VALUE;
-    let number = Number.MAX_VALUE;
-    // 배열을 오름차순으로 정렬
-    nums.sort((a, b) => a - b);
-    // 첫 번째 숫자를 기준으로 루프
-    for (let start = 0; start < nums.length; start++) {
-        // 두 번째와 세 번째 숫자의 인덱스 설정
-        let left = start + 1;
-        let right = nums.length - 1;
-        // 투 포인터 알고리즘을 사용하여 가장 가까운 합을 찾음
-        while (left < right) {
-            // 현재 조합의 합과 타겟과의 차이의 절댓값 계산
-            let currentDiff = Math.abs(target - (nums[start] + nums[left] + nums[right]));
-            // 현재 차이가 이전에 저장한 차이보다 작으면 결과 및 차이 갱신
-            if (currentDiff < number) {
-                result = nums[start] + nums[left] + nums[right];
-                number = currentDiff;
+    let result = Number.MAX_VALUE; // 가장 가까운 합의 초기값을 설정합니다.
+    let number = Number.MAX_VALUE; // 차이의 최솟값을 저장할 변수를 초기화합니다.
+
+    nums.sort((a, b) => a - b); // 배열을 오름차순으로 정렬합니다.
+
+    for (let start = 0; start < nums.length; start++) { // 배열을 순회합니다.
+        let left = start + 1; // 왼쪽 포인터를 설정합니다.
+        let right = nums.length - 1; // 오른쪽 포인터를 설정합니다.
+
+        while (left < right) { // 포인터가 만날 때까지 반복합니다.
+            if (Math.abs(target - (nums[start] + nums[left] + nums[right])) < number) { // 현재 합의 차이가 최솟값보다 작은 경우
+                result = nums[start] + nums[left] + nums[right]; // 결과 값을 업데이트합니다.
+                number = Math.abs(target - (nums[start] + nums[left] + nums[right])); // 차이의 최솟값을 업데이트합니다.
             }
-            // 합이 타겟보다 크면 세 번째 숫자를 감소
-            if (nums[start] + nums[left] + nums[right] > target) {
-                right--;
-            }
-            // 합이 타겟과 같으면 루프 종료
-            else if (nums[start] + nums[left] + nums[right] === target) {
-                break;
-            }
-            // 합이 타겟보다 작으면 두 번째 숫자를 증가
-            else {
-                left++;
+            if (nums[start] + nums[left] + nums[right] > target) { // 현재 합이 목표보다 큰 경우
+                right--; // 오른쪽 포인터를 감소시킵니다.
+            } else if (nums[start] + nums[left] + nums[right] === target) { // 합이 목표와 같은 경우
+                break; // 반복문을 종료합니다.
+            } else { // 현재 합이 목표보다 작은 경우
+                left++; // 왼쪽 포인터를 증가시킵니다.
             }
         }
     }
-    return result;
+    return result; // 결과 값을 반환합니다.
 };
