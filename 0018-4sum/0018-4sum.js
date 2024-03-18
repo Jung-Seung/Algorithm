@@ -4,57 +4,46 @@
  * @return {number[][]}
  */
 var fourSum = function(nums, target) {
-  // 주어진 배열을 정렬
-  nums.sort((a, b) => a - b);
-  // 결과를 저장할 배열
-  const quadruplets = [];
-  // 배열의 길이
-  const n = nums.length;
-  // 첫 번째 숫자 선택
-  for (let i = 0; i < n - 3; i++) {
-    // 중복된 숫자는 건너뛰기
-    if (i > 0 && nums[i] === nums[i - 1]) {
+  nums.sort((a, b) => a - b); // 배열을 오름차순으로 정렬합니다.
+  const quadruplets = []; // 결과를 저장할 배열입니다.
+  const n = nums.length; // 배열의 길이입니다.
+  
+  for (let i = 0; i < n - 3; i++) { // 첫 번째 숫자를 선택합니다.
+    if (i > 0 && nums[i] === nums[i - 1]) { // 중복된 숫자는 건너뜁니다.
       continue;
     }
-    // 두 번째 숫자 선택
-    for (let j = i + 1; j < n - 2; j++) {
-      // 중복된 숫자는 건너뛰기
-      if (j > i + 1 && nums[j] === nums[j - 1]) {
+    
+    for (let j = i + 1; j < n - 2; j++) { // 두 번째 숫자를 선택합니다.
+      if (j > i + 1 && nums[j] === nums[j - 1]) { // 중복된 숫자는 건너뜁니다.
         continue;
       }
-      // 세 번째와 네 번째 숫자의 포인터 설정
-      let left = j + 1;
-      let right = n - 1;
-      // 투 포인터를 사용하여 합 계산
-      while (left < right) {
-        // 네 숫자의 합 계산 (BigInt를 사용하여 오버플로우 방지)
-        const sum = BigInt(nums[i]) + BigInt(nums[j]) + BigInt(nums[left]) + BigInt(nums[right]);
-        // 합이 목표값보다 작은 경우
-        if (sum < target) {
-          left++;
-        }
-        // 합이 목표값보다 큰 경우
-        else if (sum > target) {
-          right--;
-        }
-        // 합이 목표값과 같은 경우
-        else {
-          // 결과에 추가
-          quadruplets.push([nums[i], nums[j], nums[left], nums[right]]);
-          // 중복된 숫자는 건너뛰기
+      
+      let left = j + 1; // 왼쪽 포인터를 설정합니다.
+      let right = n - 1; // 오른쪽 포인터를 설정합니다.
+      
+      while (left < right) { // 왼쪽 포인터가 오른쪽 포인터보다 작은 동안 반복합니다.
+        const sum = BigInt(nums[i]) + BigInt(nums[j]) + BigInt(nums[left]) + BigInt(nums[right]); // 네 숫자의 합을 계산합니다.
+        
+        if (sum < target) { // 합이 목표값보다 작은 경우
+          left++; // 왼쪽 포인터를 오른쪽으로 이동합니다.
+        } else if (sum > target) { // 합이 목표값보다 큰 경우
+          right--; // 오른쪽 포인터를 왼쪽으로 이동합니다.
+        } else { // 합이 목표값과 같은 경우
+          quadruplets.push([nums[i], nums[j], nums[left], nums[right]]); // 네 숫자의 조합을 결과 배열에 추가합니다.
+          
+          // 중복된 숫자를 건너뛰기 위해 포인터를 이동합니다.
           while (left < right && nums[left] === nums[left + 1]) {
             left++;
           }
           while (left < right && nums[right] === nums[right - 1]) {
             right--;
           }
-          // 다음 조합을 위해 포인터 이동
-          left++;
-          right--;
+          left++; // 왼쪽 포인터를 다음 값으로 이동합니다.
+          right--; // 오른쪽 포인터를 다음 값으로 이동합니다.
         }
       }
     }
   }
-  // 최종 결과 반환
-  return quadruplets;
+  
+  return quadruplets; // 네 개의 숫자 조합을 반환합니다.
 };
