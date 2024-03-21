@@ -10,18 +10,23 @@
  * @param {ListNode} list2
  * @return {ListNode}
  */
-var mergeTwoLists = function(l1, l2) {
-    // 만약 l1이 존재하지 않는다면 l2를 반환합니다.
-    if (!l1) return l2;
-    // 만약 l2가 존재하지 않는다면 l1을 반환합니다.
-    if (!l2) return l1;
-    // l1의 값이 l2의 값보다 작다면 l1을 선택하여 재귀적으로 함수를 호출하고 l1을 반환합니다.
-    if (l1.val < l2.val) {
-        l1.next = mergeTwoLists(l1.next, l2);
-        return l1;
-    // l1의 값이 l2의 값보다 크거나 같다면 l2를 선택하여 재귀적으로 함수를 호출하고 l2를 반환합니다.
+var mergeTwoLists = function(list1, list2) {
+    // 만약 list1이 null이라면 list2를 반환합니다.
+    if (!list1) return list2;
+    // 만약 list2가 null이라면 list1을 반환합니다.
+    if (!list2) return list1;
+    
+    // 만약 list1의 값이 list2의 값보다 작거나 같다면
+    if (list1.val <= list2.val) {
+        // list1의 다음 노드를 list1과 list2의 병합 결과로 갱신합니다.
+        list1.next = mergeTwoLists(list1.next, list2);
+        // list1을 반환합니다.
+        return list1;
     } else {
-        l2.next = mergeTwoLists(l1, l2.next);
-        return l2;
+        // 위의 경우가 아니라면
+        // list2의 다음 노드를 list1과 list2의 병합 결과로 갱신합니다.
+        list2.next = mergeTwoLists(list1, list2.next);
+        // list2를 반환합니다.
+        return list2;
     }
 };
