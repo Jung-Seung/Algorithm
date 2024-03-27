@@ -9,36 +9,36 @@
  * @param {ListNode[]} lists
  * @return {ListNode}
  */
-// 두 정렬된 연결 리스트를 병합하는 함수입니다.
-var mergeTwoLists = function(l1, l2) {
-    // l1이 존재하지 않는 경우, l2를 반환합니다.
-    if (!l1) {
-        return l2;
-    }
-    // l2가 존재하지 않는 경우, l1을 반환합니다.
-    if (!l2) {
-        return l1;
-    }
-    // l1의 값이 l2의 값보다 작은 경우
-    if (l1.val < l2.val) {
-        // l1의 다음 노드와 l2를 병합하여 반환합니다.
-        l1.next = mergeTwoLists(l1.next, l2);
-        return l1;
-    } else {
-        // l2의 다음 노드와 l1을 병합하여 반환합니다.
-        l2.next = mergeTwoLists(l1, l2.next);
-        return l2;
-    }
-};
+const mergeKLists = function(lists) {
+    // 우선순위 큐를 생성합니다. 우선순위는 노드의 값으로 설정합니다.
+    const queue = new MinPriorityQueue({ priority: x => x.val });
 
-// 여러 정렬된 연결 리스트를 병합하는 함수입니다.
-var mergeKLists = function(lists) {
-    // 결과 리스트를 초기화합니다.
-    let ans = null;
-    // 각 리스트를 하나씩 병합합니다.
-    for (let i = 0; i < lists.length; i++) {
-        ans = mergeTwoLists(ans, lists[i]);
+    // 주어진 연결 리스트들의 헤드를 우선순위 큐에 추가합니다.
+    for (const head of lists) {
+        if (head) {
+            queue.enqueue(head);
+        }
     }
-    // 병합된 결과를 반환합니다.
-    return ans;
-};
+
+    // 결과 리스트의 헤드를 초기화합니다.
+    let result = new ListNode();
+    const head = result;
+
+    // 우선순위 큐가 비어있지 않은 동안 반복합니다.
+    while (!queue.isEmpty()) {
+        // 우선순위 큐에서 우선순위가 가장 높은 노드를 추출합니다.
+        const { val, next } = queue.dequeue().element;
+
+        // 결과 리스트에 새로운 노드를 추가합니다.
+        result.next = new ListNode(val);
+        result = result.next;
+
+        // 추출한 노드의 다음 노드를 우선순위 큐에 추가합니다.
+        if (next) {
+            queue.enqueue(next);
+        }
+    }
+
+    // 병합된 연결 리스트의 헤드를 반환합니다.
+    return head.next;
+}
