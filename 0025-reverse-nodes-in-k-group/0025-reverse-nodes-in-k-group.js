@@ -10,50 +10,35 @@
  * @param {number} k
  * @return {ListNode}
  */
-var reverseKGroup = function(head, k) {
-    // 가장 처음의 더미 노드 생성
-    var dummy = new ListNode(0);
-    dummy.next = head;
-    var prevGroupTail = dummy;
+const reverseKGroup = function(head, k) {
+    // 입력이 없으면 null을 반환합니다.
+    if (!head) return null;
 
-    // head가 존재하는 동안 반복
-    while (head) {
-        // 현재 그룹의 시작점 할당
-        var groupStart = head;
-        // 현재 그룹의 끝점 계산
-        var groupEnd = getGroupEnd(head, k);
-
-        // 그룹의 끝이 존재하지 않을 경우 반복 종료
-        if (!groupEnd)
-            break;
-
-        // 이전 그룹의 꼬리를 현재 그룹의 뒤집힌 리스트의 헤드로 설정
-        prevGroupTail.next = reverseList(groupStart, groupEnd.next);
-        prevGroupTail = groupStart;
-        head = prevGroupTail.next;
-    }
-    // 더미 노드의 다음 노드를 새로운 헤드 노드로 설정
-    var newHead = dummy.next;
-    return newHead;
-}
-
-// 그룹의 끝점을 찾는 함수
-var getGroupEnd = function(head, k) {
-    while (head && k > 1) {
+    // 연결 리스트를 배열로 변환하여 순서를 뒤집습니다.
+    let list = [];
+    while (head !== null) {
+        list.push(head.val);
         head = head.next;
-        k--;
     }
-    return head;
-}
 
-// 노드를 뒤집는 함수
-var reverseList = function(head, stop) {
-    var prev = stop;
-    while (head !== stop) {
-        var next = head.next;
-        head.next = prev;
-        prev = head;
-        head = next;
+    // 연결 리스트가 비어있으면 null을 반환합니다.
+    if (list.length === 0) return null;
+
+    // k개의 노드로 이루어진 그룹을 순회하면서 노드의 순서를 뒤집습니다.
+    for (let i = 0; i < list.length; i += k) {
+        let temp = list.slice(i, i+k);
+        if (temp.length < k) continue;
+        for (let j = 0; j < k; j++) {
+            list[i+j] = temp[k-j-1];
+        }
     }
-    return prev;
-}
+
+    // 뒤집힌 순서의 노드로부터 새로운 연결 리스트를 구성합니다.
+    let result = new ListNode(list.pop());
+    while (list.length > 0) {
+        result = new ListNode(list.pop(), result);
+    }
+
+    // 새로운 연결 리스트의 헤드 노드를 반환합니다.
+    return result;
+};
